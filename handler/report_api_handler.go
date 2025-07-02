@@ -17,7 +17,8 @@ type DownloadHandler struct {
 var GetDownloadHandler = new(DownloadHandler)
 
 func init() {
-	GetDownloadHandler.postMapping("download", download)
+	GetDownloadHandler.getMapping("download", download)
+	GetDownloadHandler.getMapping("download/file", downloadFile)
 }
 
 func download(ctx *gin.Context) {
@@ -28,24 +29,60 @@ func download(ctx *gin.Context) {
 	}
 
 	// Match files: /tmp/prefix*
-	pattern := filepath.Join("/tmp", prefix+"*")
-	files, err := filepath.Glob(pattern)
+	//pattern := filepath.Join("/tmp", prefix+"*")
+	//pattern := filepath.Join("/tmp", prefix+"*")
+	files, err := filepath.Glob(prefix)
 	if err != nil || len(files) == 0 {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": "No matching files"})
 		return
 	}
 
-	// Set response headers
-	ctx.Writer.Header().Set("Content-Type", "application/octet-stream")
-
+	// Return file list for client to download individually
+	var fileList []gin.H
 	for _, path := range files {
-		file, err := os.Open(path)
+		fileInfo, err := os.Stat(path)
 		if err != nil {
 			continue
 		}
-		defer file.Close()
-
-		ctx.Writer.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", filepath.Base(path)))
-		io.Copy(ctx.Writer, file)
+		fileList = append(fileList, gin.H{
+			"filename": filepath.Base(path),
+			"size":     fileInfo.Size(),
+			"path":     path,
+		})
 	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"status": "success",
+		"files":  fileList,
+		"count":  len(fileList),
+	})
+}
+
+func downloadFile(ctx *gin.Context) {
+	filePath := ctx.Query("path")
+	if filePath == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Missing file path parameter"})
+		return
+	}
+
+	// Check if file exists
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "File not found"})
+		return
+	}
+
+	// Open file
+	file, err := os.Open(filePath)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Cannot open file"})
+		return
+	}
+	defer file.Close()
+
+	// Set response headers
+	ctx.Writer.Header().Set("Content-Type", "application/octet-stream")
+	ctx.Writer.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", filepath.Base(filePath)))
+
+	// Copy file to response
+	io.Copy(ctx.Writer, file)
 }

@@ -1,7 +1,7 @@
 package ginporm
 
 import (
-	"dmp_distribution/common"
+	common "dmp_file/common"
 	"net/http"
 	"regexp"
 	"strconv"

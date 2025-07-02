@@ -2,10 +2,9 @@ package control
 
 import (
 	"context"
-	mysqldb "dmp_distribution/common/mysql"
-	redis "dmp_distribution/common/redis"
-	"dmp_distribution/core"
-	handlers "dmp_distribution/handler"
+	mysqldb "dmp_file/common/mysql"
+	"dmp_file/core"
+	handlers "dmp_file/handler"
 	"log"
 	"net/http"
 	_ "net/http/pprof"
@@ -53,9 +52,9 @@ func init() {
 	// 加载配置文件
 	config = core.LoadConfig(*cfg)
 	mysqldb.InitMysql()
-	redis.C32_Redis_Pools.Init_RedisPool(config.REDIS_POOL_DB_CRC)
+	//redis.C32_Redis_Pools.Init_RedisPool(config.REDIS_POOL_DB_CRC)
 	// 初始化 Redis
-	redis.Mates.InitRedis(config.REDIS_POOL_DB)
+	//redis.Mates.InitRedis(config.REDIS_POOL_DB)
 }
 
 func MainControl() {

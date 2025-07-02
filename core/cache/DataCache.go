@@ -3,7 +3,7 @@ package rdcache
 import (
 	"context"
 	"database/sql"
-	"dmp_distribution/core"
+	"dmp_file/core"
 	"log"
 	"sync"
 	"time"

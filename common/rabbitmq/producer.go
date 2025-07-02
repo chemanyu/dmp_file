@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	pool "dmp_distribution/common/Pool"
+	pool "dmp_file/common/Pool"
 
 	jsoniter "github.com/json-iterator/go"
 	"github.com/streadway/amqp"

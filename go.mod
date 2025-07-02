@@ -1,4 +1,4 @@
-module dmp_distribution
+module dmp_file
 
 go 1.23.0
 

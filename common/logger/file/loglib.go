@@ -3,9 +3,9 @@ package loglib
 import (
 	"bufio"
 	"container/list"
-	kafkalib "dmp_distribution/common/logger/kafka"
-	mysqldb "dmp_distribution/common/mysql"
-	"dmp_distribution/core"
+	kafkalib "dmp_file/common/logger/kafka"
+	mysqldb "dmp_file/common/mysql"
+	"dmp_file/core"
 	"log"
 	"os"
 	"strings"

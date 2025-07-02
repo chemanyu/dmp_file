@@ -1,7 +1,7 @@
 package mysqldb
 
 import (
-	"dmp_distribution/core"
+	"dmp_file/core"
 	"log"
 	"time"
 

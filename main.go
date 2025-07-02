@@ -1,7 +1,7 @@
 package main
 
 import (
-	"dmp_distribution/control"
+	"dmp_file/control"
 )
 
 func main() {

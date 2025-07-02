@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"compress/gzip"
 	"crypto/tls"
-	ginprom "dmp_distribution/common/ginporm"
+	ginprom "dmp_file/common/ginporm"
 	"errors"
 	"fmt"
 	"io"

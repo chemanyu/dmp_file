@@ -2,7 +2,7 @@ package mysqldb
 
 import (
 	"database/sql"
-	"dmp_distribution/core"
+	"dmp_file/core"
 	"fmt"
 	"time"
 
